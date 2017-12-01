@@ -52,5 +52,5 @@ bot.on('callback_query', msg => {
             bot.sendMessage(msg.from.id, message + users[msg.from.id].results + '/' + questions.length);
             delete users[msg.from.id];
         }
-    }, 1);
+    }, 10);
 });
