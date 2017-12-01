@@ -1,32 +1,7 @@
+const config = require('./config.js');
+const successPercent = config.successPercent || 0.7;
 const TelegramBot = require('node-telegram-bot-api');
-
-// replace the value below with the Telegram token you receive from @BotFather
-const token = '393158597:AAEGzfvEIF6VPUu2Fi_8VL_PVhQeG2kcys0';
-
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token, {polling: true});
-
-const successPercent = 0.7;
-
-// Matches "/echo [whatever]"
-// bot.onText(/\/echo (.+)/, (msg, match) => {
-//     // 'msg' is the received Message from Telegram
-//     // 'match' is the result of executing the regexp above on the text content
-//     // of the message
-//
-//     const chatId = msg.chat.id;
-//     const resp = match[1]; // the captured "whatever"
-//
-//     // send back the matched "whatever" to the chat
-//     bot.sendMessage(chatId, resp);
-// });
-
-// Listen for any kind of message. There are different kinds of
-// messages.
-// bot.on('message', (msg) => {
-//     // send a message to the chat acknowledging receipt of their message
-//     bot.sendMessage(msg.chat.id, JSON.stringify(msg));
-// });
+const bot = new TelegramBot(config.botToken, {polling: true});
 
 let users = {};
 
@@ -85,23 +60,23 @@ bot.onText(/\/start/, (msg, match) => startQuiz(msg));
 
 bot.on('callback_query', msg => {
     const answer = msg.data.split('_');
-const index = answer[0];
-const variant = parseInt(answer[1]);
-const isCorrect = questions[index].correct === variant;
+    const index = answer[0];
+    const variant = parseInt(answer[1]);
+    const isCorrect = questions[index].correct === variant;
 
-if (isCorrect) {
-    users[msg.from.id].results++;
-}
+    if (isCorrect) {
+        users[msg.from.id].results++;
+    }
 
-bot.sendMessage(msg.from.id, isCorrect ? 'Ответ верный ✅' : 'Ответ неверный ❌');
+    bot.sendMessage(msg.from.id, isCorrect ? 'Ответ верный ✅' : 'Ответ неверный ❌');
 
-let question = users[msg.from.id].questions.pop();
+    let question = users[msg.from.id].questions.pop();
 
-if (question) {
-    ask(msg.from.id, question);
-} else {
-    let success = users[msg.from.id].results / questions.length > successPercent;
-    let message = success ? 'Поздравляю, покажите результат нашему консультанту ' : 'Получится в другой раз ';
-    bot.sendMessage(msg.from.id, message + users[msg.from.id].results + '/' + questions.length);
-}
+    if (question) {
+        ask(msg.from.id, question);
+    } else {
+        let success = users[msg.from.id].results / questions.length > successPercent;
+        let message = success ? 'Поздравляю, покажите результат нашему консультанту ' : 'Получится в другой раз ';
+        bot.sendMessage(msg.from.id, message + users[msg.from.id].results + '/' + questions.length);
+    }
 });
