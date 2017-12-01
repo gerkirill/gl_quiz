@@ -1,0 +1,6 @@
+{
+    "uid": "gl-quiz",
+    "append": true,
+    "watch": true,
+    "script": "index.js"
+}

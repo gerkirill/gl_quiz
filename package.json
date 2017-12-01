@@ -4,6 +4,9 @@
   "description": "gl quiz",
   "main": "index.js",
   "scripts": {
+    "dev": "forever forever.json",
+    "start": "forever start forever.json",
+    "stop": "forever stop gl-quiz",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,5 +25,8 @@
   "homepage": "https://github.com/lnr/gl_quiz#readme",
   "dependencies": {
     "node-telegram-bot-api": "^0.29.0"
+  },
+  "devDependencies": {
+    "forever": "^0.15.3"
   }
 }

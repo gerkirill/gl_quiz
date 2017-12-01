@@ -11,7 +11,9 @@ function startQuiz(msg){
         questions: JSON.parse(JSON.stringify(questions)),
         results: 0
     };
-    let question = users[msg.chat.id].questions.pop();
+    bot.sendMessage(msg.chat.id, `Привет 👋 Хочешь узнать о GlobalLogic такое, что не каждому расскажет HR? 😉 
+Пройди этот квиз, угадай правильные ответы на вопросы, и если повезет - получишь приз 🎁`);
+    let question = users[msg.chat.id].questions.shift();
     ask(msg.chat.id, question);
 }
 
@@ -24,7 +26,7 @@ function ask(chat, question) {
     bot.sendMessage(chat, question.title, options);
 }
 
-bot.onText(/\/start/, (msg, match) => startQuiz(msg));
+bot.onText(/\/(re)?start/, (msg, match) => startQuiz(msg));
 
 bot.on('callback_query', msg => {
     if (!users[msg.from.id]) {
@@ -39,18 +41,20 @@ bot.on('callback_query', msg => {
         users[msg.from.id].results++;
     }
 
-    bot.sendMessage(msg.from.id, isCorrect ? 'Ответ верный ✅' : 'Ответ неверный ❌');
+    bot.sendMessage(msg.from.id, isCorrect ? '✅ Правильно' : '❌ Неправильно');
 
-    let question = users[msg.from.id].questions.pop();
+    let question = users[msg.from.id].questions.shift();
 
     setTimeout(() => {
         if (question) {
             ask(msg.from.id, question);
         } else {
             let success = users[msg.from.id].results / questions.length > successPercent;
-            let message = success ? 'Поздравляю, покажите результат нашему консультанту ' : 'Получится в другой раз ';
-            bot.sendMessage(msg.from.id, message + users[msg.from.id].results + '/' + questions.length);
+            let message = success
+              ? '🤘Отлично🤘 Покажи результат нашему консультанту и получи приз 🎁'
+              : '👍 Неплохо. Но на приз не тянет 😉 Нажми /start чтобы попробовать еще раз.';
+            bot.sendMessage(msg.from.id, `${users[msg.from.id].results} из ${questions.length}! ${message}`);
             delete users[msg.from.id];
         }
-    }, 10);
+    }, 500);
 });
