@@ -27,6 +27,9 @@ function ask(chat, question) {
 bot.onText(/\/start/, (msg, match) => startQuiz(msg));
 
 bot.on('callback_query', msg => {
+    if (!users[msg.from.id]) {
+        return;
+    }
     const answer = msg.data.split('_');
     const index = answer[0];
     const variant = parseInt(answer[1]);
@@ -47,6 +50,7 @@ bot.on('callback_query', msg => {
             let success = users[msg.from.id].results / questions.length > successPercent;
             let message = success ? 'Поздравляю, покажите результат нашему консультанту ' : 'Получится в другой раз ';
             bot.sendMessage(msg.from.id, message + users[msg.from.id].results + '/' + questions.length);
+            delete users[msg.from.id];
         }
     }, 1);
 });
