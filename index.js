@@ -14,7 +14,7 @@ function startQuiz(msg){
     bot.sendMessage(msg.chat.id, `Привет 👋 Хочешь узнать о GlobalLogic такое, что не каждому расскажет HR? 😉 
 Пройди этот квиз, угадай правильные ответы на вопросы, и если повезет - получишь приз 🎁`);
     let question = users[msg.chat.id].questions.shift();
-    ask(msg.chat.id, question);
+    setTimeout(() => ask(msg.chat.id, question), 5000);
 }
 
 function ask(chat, question) {
@@ -56,5 +56,5 @@ bot.on('callback_query', msg => {
             bot.sendMessage(msg.from.id, `${users[msg.from.id].results} из ${questions.length}! ${message}`);
             delete users[msg.from.id];
         }
-    }, 500);
+    }, 1000);
 });
