@@ -1,0 +1,26 @@
+{
+  "name": "gl_quiz",
+  "version": "1.0.0",
+  "description": "gl quiz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lnr/gl_quiz.git"
+  },
+  "keywords": [
+    "gl",
+    "quiz"
+  ],
+  "author": "oleksandr.oryshchuk@globallogic.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lnr/gl_quiz/issues"
+  },
+  "homepage": "https://github.com/lnr/gl_quiz#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.29.0"
+  }
+}
